@@ -1,26 +1,14 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Toaster } from "react-hot-toast";
+import { AppContextProvider } from "./context/AppContextProvider";
+import AppSpeechRouter from "./routers";
 
-function App() {
+export default function AppSpeech() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AppContextProvider>
+      <div className="h-screen w-full relative">
+        <AppSpeechRouter />
+        <Toaster position="bottom-right" reverseOrder={false} />
+      </div>
+    </AppContextProvider>
   );
 }
-
-export default App;
