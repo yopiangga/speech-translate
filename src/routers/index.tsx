@@ -9,7 +9,7 @@ export default function AppSpeechRouter(){
     useEffect(() => {
         const timer = setTimeout(() => {
             setLoad(false);
-        }, 2000);
+        }, 1000);
 
         return () => clearTimeout(timer);
     }, []);
