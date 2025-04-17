@@ -4,10 +4,11 @@ import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
 import { GoogleGenAI } from "@google/genai";
+import TextToSpeech from "src/components/loading/text-to-speech";
 
 const lang = [
   { code: "en-US", name: "English" },
-  { code: "id", name: "Indonesia" },
+  { code: "id-ID", name: "Indonesia" },
 ];
 
 export function HomePage() {
@@ -69,7 +70,12 @@ export function HomePage() {
           <div className="bg-slate-900 w-11/12 lg:w-1/2 h-full rounded-xl shadow-lg flex flex-col items-center justify-center p-4">
             <p className="text-md w-full h-full">{transcript}</p>
           </div>
-          <div className="bg-slate-900 w-11/12 lg:w-1/2 h-full rounded-xl shadow-lg flex flex-col items-center justify-center p-4">
+          <div className="bg-slate-900 w-11/12 lg:w-1/2 h-full rounded-xl shadow-lg flex flex-col items-center justify-center p-4 relative">
+            <div className="absolute top-2 right-3">
+              <TextToSpeech text={targetText} codeLang={
+                targetLang.code
+              } />
+            </div>
             <p className="text-md w-full h-full">{targetText}</p>
           </div>
         </div>
@@ -85,7 +91,7 @@ export function HomePage() {
                 setTargetText("");
               }}
             >
-              <h4 className="text-xl">{baseLang.name}</h4>
+              <h4 className="text-lg">{baseLang.name}</h4>
             </button>
           </div>
           <div className="text-2xl font-bold w-2/12 flex justify-center">
@@ -120,7 +126,7 @@ export function HomePage() {
                 setTargetText("");
               }}
             >
-              <h4 className="text-xl">{targetLang.name}</h4>
+              <h4 className="text-lg">{targetLang.name}</h4>
             </button>
           </div>
         </div>
