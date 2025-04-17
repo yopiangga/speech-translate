@@ -3,13 +3,17 @@ import { FiChevronLeft, FiHome, FiMic, FiStopCircle } from "react-icons/fi";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
+import { GoogleGenAI } from "@google/genai";
 
 const lang = [
   { code: "en-US", name: "English" },
-  { code: "id", name: "Bahasa Indonesia"},
-]
+  { code: "id", name: "Indonesia" },
+];
 
 export function HomePage() {
+  const apiKey = process.env.REACT_APP_API_KEY;
+  const ai = new GoogleGenAI({ apiKey: apiKey });
+
   const {
     transcript,
     listening,
@@ -20,12 +24,27 @@ export function HomePage() {
   const [baseLang, setBaseLang] = useState(lang[0]);
   const [targetLang, setTargetLang] = useState(lang[1]);
 
-  // useEffect(() => {
-  //   SpeechRecognition.startListening({
-  //     continuous: true,
-  //     language: language
-  //   })
-  // }, [language]);
+  const [targetText, setTargetText] = useState("");
+
+  useEffect(() => {
+    if (transcript == "") return;
+    ai.models
+      .generateContent({
+        model: "gemini-2.0-flash",
+        contents:
+          "The context is for medical dental. Translate this text to " +
+          targetLang.name +
+          ": " +
+          transcript +
+          ". Result only the translated text.",
+      })
+      .then((response) => {
+        setTargetText(response.text || "");
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  }, [transcript]);
 
   return (
     <div className="w-full h-full flex flex-col items-center bg-slate-950 text-gray-50">
@@ -51,20 +70,23 @@ export function HomePage() {
             <p className="text-md w-full h-full">{transcript}</p>
           </div>
           <div className="bg-slate-900 w-11/12 lg:w-1/2 h-full rounded-xl shadow-lg flex flex-col items-center justify-center p-4">
-            <p className="text-md w-full h-full">Result translate</p>
+            <p className="text-md w-full h-full">{targetText}</p>
           </div>
         </div>
 
         <div className="flex justify-between w-full items-center py-4">
           <div className="text-center w-5/12">
-          <button onClick={() => {
-            const temp = baseLang;
-            setBaseLang(targetLang);
-            setTargetLang(temp);
-            resetTranscript();
-          }}>
-            <h4 className="text-xl">{baseLang.name}</h4>
-          </button>
+            <button
+              onClick={() => {
+                const temp = baseLang;
+                setBaseLang(targetLang);
+                setTargetLang(temp);
+                resetTranscript();
+                setTargetText("");
+              }}
+            >
+              <h4 className="text-xl">{baseLang.name}</h4>
+            </button>
           </div>
           <div className="text-2xl font-bold w-2/12 flex justify-center">
             {listening ? (
@@ -89,15 +111,16 @@ export function HomePage() {
             )}
           </div>
           <div className="text-center w-5/12">
-            <button onClick={() => {
-              const temp = targetLang;
-              setTargetLang(baseLang);
-              setBaseLang(temp);
-              resetTranscript();
-            }}>
-            <h4 className="text-xl">{
-              targetLang.name
-              }</h4>
+            <button
+              onClick={() => {
+                const temp = targetLang;
+                setTargetLang(baseLang);
+                setBaseLang(temp);
+                resetTranscript();
+                setTargetText("");
+              }}
+            >
+              <h4 className="text-xl">{targetLang.name}</h4>
             </button>
           </div>
         </div>
