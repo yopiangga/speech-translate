@@ -91,7 +91,7 @@ export function HomePage() {
                 setTargetText("");
               }}
             >
-              <h4 className="text-lg">{baseLang.name}</h4>
+              <h4 className="text-md">{baseLang.name}</h4>
             </button>
           </div>
           <div className="text-2xl font-bold w-2/12 flex justify-center">
@@ -126,7 +126,7 @@ export function HomePage() {
                 setTargetText("");
               }}
             >
-              <h4 className="text-lg">{targetLang.name}</h4>
+              <h4 className="text-md">{targetLang.name}</h4>
             </button>
           </div>
         </div>
